@@ -1,0 +1,8 @@
+{
+  "stats": {
+    "projectsCompleted": 24,
+    "successRate": 91,
+    "marketsSupported": 6
+  },
+  "note": "Reference defaults for the static prototype. Production data should live in an authenticated backend/database."
+}

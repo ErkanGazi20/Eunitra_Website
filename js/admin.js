@@ -1,0 +1,5 @@
+const DEFAULT_STATS={projects:24,success:91,markets:6};
+const form=document.getElementById('statsForm');const projects=document.getElementById('adminProjects');const success=document.getElementById('adminSuccess');const markets=document.getElementById('adminMarkets');const msg=document.getElementById('saveMessage');
+function load(){let data=DEFAULT_STATS;try{data={...DEFAULT_STATS,...JSON.parse(localStorage.getItem('eunitraStats')||'{}')}}catch(e){}projects.value=data.projects;success.value=data.success;markets.value=data.markets}
+form.addEventListener('submit',e=>{e.preventDefault();const data={projects:Number(projects.value),success:Number(success.value),markets:Number(markets.value)};localStorage.setItem('eunitraStats',JSON.stringify(data));msg.textContent='Published in this browser. Open Home to view the updated figures.'});
+document.getElementById('resetStats').addEventListener('click',()=>{localStorage.removeItem('eunitraStats');load();msg.textContent='Demo values restored.'});load();
