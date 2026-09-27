@@ -1,6 +1,34 @@
 const DEFAULT_STATS={projects:24,success:91,markets:6};
-function getStats(){try{return {...DEFAULT_STATS,...JSON.parse(localStorage.getItem('eunitraStats')||'{}')}}catch(e){return DEFAULT_STATS}}
-function renderStats(){const s=getStats();const p=document.getElementById('projectsCompleted');const r=document.getElementById('successRate');const m=document.getElementById('marketsSupported');if(p)p.textContent=`${s.projects}+`;if(r)r.textContent=`${s.success}%`;if(m)m.textContent=s.markets}
+
+async function getStats(){
+  const cfg=window.EUNITRA_CONFIG||{};
+  const url=cfg.supabaseUrl||'';
+  const key=cfg.supabasePublishableKey||'';
+  const configured=url.startsWith('https://')&&!url.includes('YOUR_SUPABASE')&&key.length>20&&!key.includes('YOUR_SUPABASE');
+  if(!configured)return DEFAULT_STATS;
+  try{
+    const response=await fetch(`${url}/rest/v1/site_stats?id=eq.1&select=projects,success,markets`,{
+      headers:{apikey:key,Accept:'application/json'}
+    });
+    if(!response.ok)throw new Error(`Stats request failed: ${response.status}`);
+    const rows=await response.json();
+    return rows[0]?{...DEFAULT_STATS,...rows[0]}:DEFAULT_STATS;
+  }catch(error){
+    console.error('Could not load EUNITRA statistics:',error);
+    return DEFAULT_STATS;
+  }
+}
+
+async function renderStats(){
+  const s=await getStats();
+  const p=document.getElementById('projectsCompleted');
+  const r=document.getElementById('successRate');
+  const m=document.getElementById('marketsSupported');
+  if(p)p.textContent=`${s.projects}+`;
+  if(r)r.textContent=`${s.success}%`;
+  if(m)m.textContent=s.markets;
+}
+
 function setLanguage(lang){document.documentElement.lang=lang;document.querySelectorAll('[data-en][data-tr]').forEach(el=>{el.textContent=el.dataset[lang]});document.querySelectorAll('.lang-btn').forEach(btn=>btn.classList.toggle('active',btn.dataset.lang===lang));localStorage.setItem('eunitraLang',lang)}
 document.querySelectorAll('.lang-btn').forEach(btn=>btn.addEventListener('click',()=>setLanguage(btn.dataset.lang)));
 const menu=document.querySelector('.menu-toggle');const nav=document.querySelector('.main-nav');if(menu&&nav)menu.addEventListener('click',()=>{const open=nav.classList.toggle('open');menu.setAttribute('aria-expanded',open)});
@@ -10,7 +38,7 @@ if(form)form.addEventListener('submit',async e=>{
   e.preventDefault();
   const lang=localStorage.getItem('eunitraLang')||'en';
   const message=document.getElementById('formMessage');
-  const button=form.querySelector('button[type=\"submit\"]');
+  const button=form.querySelector('button[type="submit"]');
   const data=new FormData(form);
   if(data.get('_honey')) return;
 
@@ -46,4 +74,6 @@ if(form)form.addEventListener('submit',async e=>{
     button.textContent=lang==='tr'?'Mesaj gönder':'Send enquiry';
   }
 });
-renderStats();setLanguage(localStorage.getItem('eunitraLang')||'en');
+
+renderStats();
+setLanguage(localStorage.getItem('eunitraLang')||'en');

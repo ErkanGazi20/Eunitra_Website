@@ -1,2 +1,97 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>EUNITRA | Admin Prototype</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="css/styles.css"></head><body class="admin-body">
-<div class="admin-shell"><aside class="admin-sidebar"><a class="brand admin-brand" href="index.html">EUNITRA<span>.</span></a><p>Admin prototype</p><nav><a class="active" href="#stats">Homepage Statistics</a><a href="#content">Content</a><a href="#hub">Knowledge Hub</a><a href="#enquiries">Enquiries</a></nav><a class="admin-back" href="index.html">← View website</a></aside><main class="admin-main"><div class="admin-top"><div><p class="eyebrow">WEBSITE ADMIN</p><h1>Homepage statistics</h1></div><span class="status-pill">Prototype / Local browser</span></div><section class="admin-card" id="stats"><h2>Edit headline figures</h2><p>These values update the homepage in this browser. A production version will connect the same UI to an authenticated database.</p><form id="statsForm" class="admin-form"><label>Projects completed<input id="adminProjects" type="number" min="0" required></label><label>Success rate (%)<input id="adminSuccess" type="number" min="0" max="100" required></label><label>Markets supported<input id="adminMarkets" type="number" min="0" required></label><div class="admin-actions"><button class="btn btn-primary" type="submit">Publish changes</button><button class="btn btn-secondary" type="button" id="resetStats">Reset demo data</button></div><p id="saveMessage" class="form-message"></p></form></section><section class="admin-card muted-card" id="content"><h2>Content management</h2><p>Planned for the production backend: bilingual page editing, draft/publish controls and page metadata.</p></section><section class="admin-card muted-card" id="hub"><h2>Knowledge Hub</h2><p>Planned: create, edit and publish bilingual insights, reports and guides.</p></section><section class="admin-card muted-card" id="enquiries"><h2>Enquiries</h2><p>Planned: secure storage and management of contact form submissions.</p></section></main></div><script src="js/admin.js"></script></body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>EUNITRA | Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="admin-body">
+  <div class="admin-shell">
+    <aside class="admin-sidebar">
+      <a class="brand admin-brand" href="index.html">EUNITRA<span>.</span></a>
+      <p>Secure website administration</p>
+      <nav id="adminNav" hidden>
+        <a class="active" href="#stats">Homepage Statistics</a>
+        <a href="#content">Content</a>
+        <a href="#hub">Knowledge Hub</a>
+        <a href="#enquiries">Enquiries</a>
+      </nav>
+      <a class="admin-back" href="index.html">← View website</a>
+    </aside>
+
+    <main class="admin-main">
+      <section id="adminLoginPanel" class="admin-login-wrap">
+        <div class="admin-card admin-login-card">
+          <p class="eyebrow">EUNITRA ADMIN</p>
+          <h1>Sign in</h1>
+          <p>Enter the authorised EUNITRA email address. We will send a secure one-time sign-in link to your inbox.</p>
+          <form id="loginForm" class="admin-login-form">
+            <label>Email
+              <input id="loginEmail" type="email" autocomplete="username" value="ulku@eunitra.com" required>
+            </label>
+            <button class="btn btn-primary" id="loginButton" type="submit">Email me a secure sign-in link</button>
+            <p id="loginMessage" class="form-message" role="status"></p>
+          </form>
+        </div>
+      </section>
+
+      <div id="adminDashboard" hidden>
+        <div class="admin-top">
+          <div>
+            <p class="eyebrow">WEBSITE ADMIN</p>
+            <h1>Homepage statistics</h1>
+          </div>
+          <div class="admin-session">
+            <span class="status-pill">Secure / Supabase</span>
+            <span id="adminIdentity" class="admin-identity"></span>
+            <button id="logoutButton" class="admin-logout" type="button">Sign out</button>
+          </div>
+        </div>
+
+        <section class="admin-card" id="stats">
+          <h2>Edit headline figures</h2>
+          <p>Publishing changes here updates the statistics shown to every visitor on eunitra.com.</p>
+          <form id="statsForm" class="admin-form">
+            <label>Projects completed
+              <input id="adminProjects" type="number" min="0" required>
+            </label>
+            <label>Success rate (%)
+              <input id="adminSuccess" type="number" min="0" max="100" required>
+            </label>
+            <label>Markets supported
+              <input id="adminMarkets" type="number" min="0" required>
+            </label>
+            <div class="admin-actions">
+              <button class="btn btn-primary" id="publishButton" type="submit">Publish changes</button>
+              <button class="btn btn-secondary" type="button" id="reloadStats">Reload current values</button>
+            </div>
+            <p id="saveMessage" class="form-message" role="status"></p>
+          </form>
+        </section>
+
+        <section class="admin-card muted-card" id="content">
+          <h2>Content management</h2>
+          <p>Next stage: bilingual page editing, draft/publish controls and page metadata.</p>
+        </section>
+        <section class="admin-card muted-card" id="hub">
+          <h2>Knowledge Hub</h2>
+          <p>Next stage: create, edit and publish bilingual insights, reports and guides.</p>
+        </section>
+        <section class="admin-card muted-card" id="enquiries">
+          <h2>Enquiries</h2>
+          <p>Contact enquiries currently continue to be delivered to ulku@eunitra.com.</p>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/config.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>
